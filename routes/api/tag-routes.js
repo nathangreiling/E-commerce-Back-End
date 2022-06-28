@@ -7,7 +7,11 @@ router.get('/', (req, res) => {
   // find all tags
   // be sure to include its associated Product data
   Tag.findAll({
-    include: [{ model: Product}]
+    include: [
+      { model: Product,
+      through: ProductTag,
+      as: 'products'}
+  ]
   }).then(dbTagData => res.json(dbTagData))
   .catch(err => {
     console.log(err)
@@ -22,7 +26,11 @@ router.get('/:id', (req, res) => {
     where: {
       id: req.params.id
     },
-    include: [{ model: Product}]
+    include: [
+      { model: Product,
+      through: ProductTag,
+      as: 'products'}
+    ]
   }).then(dbTagData => {
     if(!dbTagData) {
       res.status(404).json({ message:'None found with that ID'})
